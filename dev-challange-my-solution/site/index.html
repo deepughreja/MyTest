@@ -1,0 +1,66 @@
+<html>
+<head>
+    <!--
+    This is the library that provides websocket streaming pub/sub
+    The dev serverver is serving the html and javascript, but it also provides updating fx data on /fx/prices.
+     -->
+    <script src="stomp.js"></script>
+    <script src="sparkline.js"></script>
+</head>
+<body>
+    <section class="content">
+        <b><u>High Level Overview : </u></b>
+        <br>
+        <br>
+        1)The following table displaying the data which is received by the stomp server.First time it is adding the new rows and 
+        then after it is updating the respactive row values.Initially on page load you will able to see the button and empty table on the screen. You can click the button to start the live 
+        updates.
+        <br><br>
+        2)Initially MidPrice column is set as NA but after 30 seconds,it's value will be updated(Along with sparkline) and you will able to see the time of last update on screen
+        <br><br>
+        3) For further extended version we can use the bootstrap and React Js library for higher rendering advantage and more structural manner. 
+        <br>
+        <br>
+        <u>you can directly contact me on :- <b>9998003549.</b></u>
+        <u>Or you can mail on <b>deepughreja@gmail.com</b> for any information.</u>
+        <br>
+        <br>
+        <span id="stompMessage"></span>
+        <br>
+        <br>
+    <span id="example-sparkline1"></span>
+    <input type="button" id="btnStartLiveUpdate" value="Start Live Update" />
+    <br><br>
+    <div id="midPriceInfo">Mid Price will be updated in next 30 seconds</div>
+    <br>
+    <div id="midPrice">Mid Price last updated on : <span id="midPriceUpdateTime">NA</span></div>
+<br>
+<div id = tableDiv>
+    <table id="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Best Bid Price</th>
+            <th>Best Ask Price</th>
+            <th>Open Bid Price</th>
+            <th>Open Ask Price</th>
+            <th>Last Change Ask Amount</th>
+            <th>Last Change Bid Amount</th>
+            <th>Mid Price</th>
+        </tr>
+        </thead>
+        <tbody id = tBody>
+            <tr id="emptyRecordBlock">
+               <td colspan="8">
+                   No record found
+               </td> 
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Code you write in index.js and anything it depends on will be bundled into bundle.js and
+     is included here -->
+     <script src="bundle.js"></script>
+</section>
+</body>
+</html>
