@@ -47,6 +47,8 @@ td:nth-child(1) {
 body {
     font:14px Verdana;
     width: 100%;
+    overflow-x: hidden;
+    
 }
 
 th, td, p, input {
@@ -69,6 +71,6 @@ table{
     right: auto;    
 }
 .content {
-    width: 900px;
+    width: 70%;
     margin: auto;
 }
