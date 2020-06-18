@@ -9,7 +9,6 @@ require('./site/index.html')
 require('./site/style.css')
 
 // Variables and constants
-var sparklineArray = [1, 2, 3, 4, 5];
 var currencyUpdateData = [];
 const sortColumnName = 'lastChangeBid';
 const sortColumnorder = 'asc';
@@ -70,6 +69,7 @@ function stompMessageHandler(message) {
 
 function updateLiveData(object) {
   const filteredData = currencyUpdateData.filter(obj => obj.name == object.name);
+  
   if (filteredData.length == 0) {
     //Adding rows first time in array
     currencyUpdateData.push({
@@ -80,7 +80,8 @@ function updateLiveData(object) {
       "openAsk": object.openAsk,
       "lastChangeAsk": object.lastChangeAsk,
       "lastChangeBid": object.lastChangeBid,
-      "midPrice": (object.bestBid + object.bestAsk) / 2
+      "midPrice": (object.bestBid + object.bestAsk) / 2,
+      "midPriceArray": [calculateMidPrice(object.bestBid, object.bestAsk)]
     });
   }
   else {
@@ -93,6 +94,8 @@ function updateLiveData(object) {
     data.lastChangeAsk = object.lastChangeAsk;
     data.lastChangeBid = object.lastChangeBid;
     data.midPrice = data.midPrice == 0 ? calculateMidPrice(object.bestBid, object.bestAsk) : ((data.midPrice + (calculateMidPrice(object.bestBid, object.bestAsk))) / 2);
+    if (data.midPrice && data.midPriceArray)
+      data.midPriceArray.push(data.midPrice);
   }
 }
 
@@ -100,6 +103,7 @@ function updateLiveData(object) {
 function clearMidPriceValues() {
   currencyUpdateData.forEach((element, index) => {
     element.midPrice = 0;
+    element.midPriceArray = [];
   });
 }
 
@@ -129,7 +133,8 @@ function compareValues(key, order = 'asc') {
 // calculate Mid Price
 var calculateMidPrice = (bestBid, bestAsk) => (bestBid + bestAsk) / 2;
 //Draw SparkLine
-var drawSparkLine = (sparkElement) => new Sparkline(sparkElement).draw(arrayRotate(sparklineArray));
+var drawSparkLine =
+  (sparkElement, array) => new Sparkline(sparkElement).draw(arrayRotate(array));
 
 // Clears 'No record found' text
 function clearEmptyRecordText() {
@@ -153,10 +158,11 @@ function renderTableWithSparkLine(currecyArray, messageObject) {
       '<td>' + object.openAsk + '</td>' +
       '<td>' + object.lastChangeAsk + '</td>' +
       '<td>' + object.lastChangeBid + '</td>' +
-      '<td>' + (object.midPrice == 0 ? 'NA' : object.midPrice) + '<span id="sparkLine"></span></td>';
+      '<td><span id="sparkLine"></span></td>';
     tableBody.appendChild(tr);
-    // //Render sparkline
-     drawSparkLine(tr.getElementsByTagName('span')[0]);
+    //Render sparkline
+    if (object.midPriceArray.length > 0)
+      drawSparkLine(tr.getElementsByTagName('span')[0], object.midPriceArray);
   });
 }
 
